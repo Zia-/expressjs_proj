@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
+// Add cors to permit server to interact with other IPs.
 var cors = require('cors');
 
 //Include mongoose to our project
@@ -38,47 +40,21 @@ mongoose.connect('mongodb://160.75.81.194:27017/test', function(error){
   console.log("Mongo Connection Successful :)");
 });
 
-var personSchema = {
+// Define mongo schema. No need to declare _id info inside it.
+var nodesSchema = {
   node: {id: String, lat: String,
         lon: String, version: String, timestamp: String,
         changeset: String, uid: String, user: String}
 };
 
-var Person = mongoose.model('Person', personSchema, 'nodes_collection');
-app.get('/peop', function(req, res){
-  Person.find({'node.version': '5'}, function(err, doc){
+// Initializing a model out of our schema. The first argument should be
+// the variable name itself, and thrid argument is the collection name in mongo
+var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
+app.get('/osmnodes', function(req, res){
+  node_model.find({'node.version': '5'}, function(err, doc){
     res.send(doc);
   })
 })
-
-// var schemamongo = mongoose.Schema;
-// var dataSchema = new schemamongo({
-//   _id: schemamongo.Types.ObjectId,
-//   node: {id: String, lat: String,
-//         lon: String, version: String, timestamp: String,
-//         changeset: String, uid: String, user: String}
-// });
-//
-// var dataget = mongoose.model('nodes_collection', dataSchema, 'files');
-// app.get('/nodes_url', function(req, res){
-//   dataget.find({'node.version': '5'}, function(err, nodes){
-//     res.send(nodes);
-//   });
-//   //res.send("hi");
-//
-//   // dataget.find({}, function(err, node){
-//   //   if(err){
-//   //           console.log('error..');
-//   //           return handleError(err);
-//   //       }
-//   //       else {
-//   //           console.log('returning data..');
-//   //           // res.render( "parkings", { version: 1 });
-//   //           res.send(node);
-//   //       }
-//   // });
-// });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -110,6 +86,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
