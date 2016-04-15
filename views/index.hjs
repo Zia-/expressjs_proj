@@ -19,9 +19,35 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiemlhLW0iLCJhIjoiQjM5aVpfTSJ9.s_U7YxQCK-Zq5SaJ
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/dark-v8', //stylesheet location
-    center: [30, 0], // starting position
-    zoom: 2 // starting zoom
+    center: [-4.5481, 54.2361], // starting position
+    zoom: 9 // starting zoom
 });
+
+
+// var url = 'https://raw.githubusercontent.com/allyapp/gis-code-challenge/master/data/activity_points.geojson';
+//var url = 'https://raw.githubusercontent.com/Zia-/Rubbish/master/multipoint2.geojson'
+var url = 'http://localhost:3002/osmnodes';
+var source = new mapboxgl.GeoJSONSource({
+    data: url
+});
+window.setInterval(function() {
+    source.setData(url);
+}, 2000);
+
+map.on('style.load', function () {
+    map.addSource('drone', source);
+    map.addLayer({
+        "id": "drone",
+        "type": "symbol",
+        "source": "drone",
+        "layout": {
+            "icon-image": "rocket-15",
+        }
+    });
+});
+
+
+
 </script>
 
 </body>

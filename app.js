@@ -33,7 +33,7 @@ app.use('/', routes);
 //app.use('/users', users);
 
 //Connect to mongoose
-mongoose.connect('mongodb://160.75.81.194:27017/test', function(error){
+mongoose.connect('mongodb://localhost:27017/test', function(error){
   if (error){
     console.log(error);
   };
@@ -51,8 +51,24 @@ var nodesSchema = {
 // the variable name itself, and thrid argument is the collection name in mongo
 var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
 app.get('/osmnodes', function(req, res){
-  node_model.find({'node.version': '5'}, function(err, doc){
-    res.send(doc);
+  node_model.find({'node.uid': '65562'}, function(err, doc){
+    // res.send(doc);
+    // console.log(typeof doc);
+    var geojson_latlon_array = new Array;
+    for (var d in doc){
+      var lon = parseFloat(doc[d]['node'].lon);
+      var lat = parseFloat(doc[d]['node'].lat);
+      var latlonset = new Array;
+      latlonset.push(lon);
+      latlonset.push(lat);
+      geojson_latlon_array.push(latlonset);
+    }
+    // var geojson_latlon_array = [[-3.5, 53.5], [0, 0], [23, 41]];
+    var geojson_str = '{ "type": "MultiPoint", "coordinates": ';
+    var geojson_latlon = JSON.stringify( geojson_latlon_array );
+    var geojson_end = ' }';
+    var geojson_str = geojson_str.concat(geojson_latlon, geojson_end);
+    res.send(geojson_str);
   })
 })
 
