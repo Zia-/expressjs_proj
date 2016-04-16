@@ -30,19 +30,27 @@ var url = 'http://localhost:3002/osmnodes';
 var source = new mapboxgl.GeoJSONSource({
     data: url
 });
-window.setInterval(function() {
-    source.setData(url);
-}, 2000);
+
+// Following snippet reloads page after every 2000ms.
+// window.setInterval(function() {
+//     source.setData(url);
+// }, 2000);
 
 map.on('style.load', function () {
-    map.addSource('drone', source);
+    map.addSource('osm_pts', source);
     map.addLayer({
-        "id": "drone",
-        "type": "symbol",
-        "source": "drone",
-        "layout": {
-            "icon-image": "rocket-15",
+        "id": "osm_nodes",
+        "type": "circle",
+        "source": "osm_pts",
+        "paint": {
+          "circle-radius": 3,
+          "circle-color": "#FFD700" // Gold color
         }
+        // "type": "symbol",
+        // "layout": {
+        //     "icon-image": "circle-stroked-11",
+        //     "icon-color": "#FFFFFF"
+        // }
     });
 });
 
