@@ -30,8 +30,11 @@ var map = L.mapbox.map('map', 'mapbox.dark')
     .setView([54.2361, -4.5481], 9);
 
 osmnodes_js = osmnodes_js.map(function (p) { return [p[1], p[0]]; });
-var heat = L.heatLayer(osmnodes_js).addTo(map);
-
+var heatMap = L.heatLayer(osmnodes_js,
+          {gradient: {0.4: 'gold', 0.65: 'lime', 1: 'red'}});
+heatMap.setOptions({blur: 0});
+heatMap.setOptions({radius: 25});
+heatMap.addTo(map);
 // var url = 'https://raw.githubusercontent.com/allyapp/gis-code-challenge/master/data/activity_points.geojson';
 //var url = 'https://raw.githubusercontent.com/Zia-/Rubbish/master/multipoint2.geojson'
 // var url = 'http://localhost:3002/osmnodes';
