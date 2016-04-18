@@ -18,21 +18,15 @@
 
 <script src="http://localhost:3002/osmnodes"></script>
 <script>
+// Fix mapbox token
 L.mapbox.accessToken = 'pk.eyJ1IjoiemlhLW0iLCJhIjoiQjM5aVpfTSJ9.s_U7YxQCK-Zq5SaJemH5bA';
-// var map = new mapboxgl.Map({
-//     container: 'map', // container id
-//     style: 'mapbox://styles/mapbox/dark-v8', //stylesheet location
-//     center: [-4.5481, 54.2361], // starting position
-//     zoom: 9 // starting zoom
-// });
 
-// Construct a bounding box for this map that the user cannot
-// move out of
+// Construct a bounding box for this map that the user cannot move out of
 var southWest = L.latLng(54.0, -4.0),
     northEast = L.latLng(55.0, -5.0),
     bounds = L.latLngBounds(southWest, northEast);
 
-
+// Initialize the map
 var map = L.mapbox.map('map', 'mapbox.dark', {
           maxBounds: bounds,
           maxZoom: 19,
@@ -42,44 +36,16 @@ var map = L.mapbox.map('map', 'mapbox.dark', {
 // zoom the map to that bounding box
 map.fitBounds(bounds);
 
-
+// Collect osmnodes data from http://localhost:3002/osmnodes url and
+// store in osmnodes_js var. osmnodes_js in osmnodes_js.map is defined
+// in the above url
 osmnodes_js = osmnodes_js.map(function (p) { return [p[1], p[0]]; });
 var heatMap = L.heatLayer(osmnodes_js,
           {gradient: {0.4: 'gold', 0.65: 'lime', 1: 'red'}});
 heatMap.setOptions({blur: 0});
+// Other options can be found here https://github.com/Leaflet/Leaflet.heat
 heatMap.setOptions({radius: 25});
 heatMap.addTo(map);
-// var url = 'https://raw.githubusercontent.com/allyapp/gis-code-challenge/master/data/activity_points.geojson';
-//var url = 'https://raw.githubusercontent.com/Zia-/Rubbish/master/multipoint2.geojson'
-// var url = 'http://localhost:3002/osmnodes';
-// var source = new mapboxgl.GeoJSONSource({
-//     data: url
-// });
-
-// Following snippet reloads page after every 2000ms.
-// window.setInterval(function() {
-//     source.setData(url);
-// }, 2000);
-
-// map.on('style.load', function () {
-//     map.addSource('osm_pts', source);
-//     map.addLayer({
-//         "id": "osm_nodes",
-//         "type": "circle",
-//         "source": "osm_pts",
-//         "paint": {
-//           "circle-radius": 3,
-//           "circle-color": "#FFD700" // Gold color
-//         }
-//         // "type": "symbol",
-//         // "layout": {
-//         //     "icon-image": "circle-stroked-11",
-//         //     "icon-color": "#FFFFFF"
-//         // }
-//     });
-// });
-
-
 
 </script>
 
