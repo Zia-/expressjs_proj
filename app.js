@@ -64,9 +64,14 @@ app.get('/osmnodes', function(req, res){
       geojson_latlon_array.push(latlonset);
     }
     // var geojson_latlon_array = [[-3.5, 53.5], [0, 0], [23, 41]];
-    var geojson_str = '{ "type": "MultiPoint", "coordinates": ';
+    // var geojson_str = '{ "type": "MultiPoint", "coordinates": ';
+    // var geojson_latlon = JSON.stringify( geojson_latlon_array );
+    // var geojson_end = ' }';
+    // var geojson_str = geojson_str.concat(geojson_latlon, geojson_end);
+
+    var geojson_str = 'var osmnodes_js = ';
     var geojson_latlon = JSON.stringify( geojson_latlon_array );
-    var geojson_end = ' }';
+    var geojson_end = ';';
     var geojson_str = geojson_str.concat(geojson_latlon, geojson_end);
     res.send(geojson_str);
   })
