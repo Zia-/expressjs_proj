@@ -26,8 +26,22 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiemlhLW0iLCJhIjoiQjM5aVpfTSJ9.s_U7YxQCK-Zq5SaJ
 //     zoom: 9 // starting zoom
 // });
 
-var map = L.mapbox.map('map', 'mapbox.dark')
-    .setView([54.2361, -4.5481], 9);
+// Construct a bounding box for this map that the user cannot
+// move out of
+var southWest = L.latLng(54.0, -4.0),
+    northEast = L.latLng(55.0, -5.0),
+    bounds = L.latLngBounds(southWest, northEast);
+
+
+var map = L.mapbox.map('map', 'mapbox.dark', {
+          maxBounds: bounds,
+          maxZoom: 19,
+          minZoom: 7
+          });
+
+// zoom the map to that bounding box
+map.fitBounds(bounds);
+
 
 osmnodes_js = osmnodes_js.map(function (p) { return [p[1], p[0]]; });
 var heatMap = L.heatLayer(osmnodes_js,
