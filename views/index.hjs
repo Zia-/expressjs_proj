@@ -28,7 +28,7 @@ var map = new mapboxgl.Map({
 //var url = 'https://raw.githubusercontent.com/Zia-/Rubbish/master/multipoint2.geojson'
 var url = 'http://localhost:3002/osmnodes';
 var source = new mapboxgl.GeoJSONSource({
-    data: url // Url to fetch osmnodes data
+    data: url 
 });
 
 // Following snippet reloads page after every 2000ms.
