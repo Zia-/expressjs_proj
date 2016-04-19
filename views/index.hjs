@@ -22,8 +22,8 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoiemlhLW0iLCJhIjoiQjM5aVpfTSJ9.s_U7YxQCK-Zq5SaJemH5bA';
 
 // Construct a bounding box for this map that the user cannot move out of
-var southWest = L.latLng(54.0, -4.0),
-    northEast = L.latLng(55.0, -5.0),
+var southWest = L.latLng(54.0, -5.0),
+    northEast = L.latLng(55.0, -4.0),
     bounds = L.latLngBounds(southWest, northEast);
 
 // Initialize the map
@@ -35,6 +35,16 @@ var map = L.mapbox.map('map', 'mapbox.dark', {
 
 // zoom the map to that bounding box
 map.fitBounds(bounds);
+
+
+
+map.on('zoomend', function(){
+  // console.log(map.getZoom());
+  if (map.getZoom() === 10){
+    console.log(bounds.getSouthWest());
+    console.log(bounds.getNorthEast());
+  }
+})
 
 // Collect osmnodes data from http://localhost:3002/osmnodes url and
 // store in osmnodes_js var. osmnodes_js in osmnodes_js.map is defined
