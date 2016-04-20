@@ -32,6 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 //app.use('/users', users);
 
+///////////////////////////////////////////////////////////////////////////////
+
 //Connect to mongoose
 mongoose.connect('mongodb://localhost:27017/test', function(error){
   if (error){
@@ -56,6 +58,43 @@ var key = 'node.version';
 var value = '5';
 var query = {};
 query[key] = value;
+
+
+// var latbound_key = 'node.lat';
+// var latbound_value = '$gt: 54.191105, $lt: 54.277578';
+// // latbound_value.push({key: '$gt'},{value: '54.191105'});
+// // latbound_value.push({key: '$lt'},{value: '54.277578'});
+// var latbound_query = {};
+// latbound_query[latbound_key] = latbound_value;
+// console.log(latbound_query);
+// console.log("hi");
+var minlat = '54.191105';
+var maxlat = '54.277578';
+var latbounds_key = 'node.lat';
+var latbounds_condition = {};
+latbounds_condition['$gt'] = minlat;
+latbounds_condition['$lt'] = maxlat;
+var lat_bounds = {};
+lat_bounds[latbounds_key] = latbounds_condition;
+// Again
+var minlon = '-4.462829';
+var maxlon = '-4.632459';
+var lonbounds_key = 'node.lon';
+var lonbounds_condition = {};
+lonbounds_condition['$gt'] = minlon;
+lonbounds_condition['$lt'] = maxlon;
+var lon_bounds = {};
+lon_bounds[lonbounds_key] = lonbounds_condition;
+
+var dic = [];
+dic.push(lat_bounds);
+dic.push(lon_bounds);
+
+var and = '$and';
+var query = {};
+query[and] = dic;
+
+console.log(query);
 
 
 app.get('/osmnodes', function(req, res){
@@ -84,6 +123,8 @@ app.get('/osmnodes', function(req, res){
     res.send(geojson_str);
   })
 })
+
+///////////////////////////////////////////////////////////////////////////////
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
