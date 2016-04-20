@@ -37,7 +37,7 @@ var map = L.mapbox.map('map', 'mapbox.dark', {
 map.fitBounds(bounds);
 
 
-
+var minlat, minlon, maxlat, maxlon;
 map.on('zoomend', function(){
   // console.log(map.getZoom());
   // if (map.getZoom() === 10){
@@ -46,15 +46,25 @@ map.on('zoomend', function(){
     // console.log(map.getZoom());
     // console.log(map.getBounds());
   // }
+  minlat = map.getBounds([0])["_southWest"]["lat"];
+  minlon = map.getBounds([0])["_southWest"]["lng"];
+  maxlat = map.getBounds([0])["_northEast"]["lat"];
+  maxlon = map.getBounds([0])["_northEast"]["lng"];
 })
 
 map.on('dragend', function(){
   // console.log(map.getZoom());
   // if (map.getZoom() === 10){
-    console.log(bounds.getSouthWest());
-    console.log(bounds.getNorthEast());
-    console.log(map.getZoom());
-    console.log(map.getBounds());
+    // console.log(bounds.getSouthWest());
+    // console.log(bounds.getNorthEast());
+    // console.log(map.getZoom());
+    // console.log(map.getBounds());
+    minlat = map.getBounds([0])["_southWest"]["lat"];
+    minlon = map.getBounds([0])["_southWest"]["lng"];
+    maxlat = map.getBounds([0])["_northEast"]["lat"];
+    maxlon = map.getBounds([0])["_northEast"]["lng"];
+    // console.log(minlat1,minlon1,maxlat1,maxlon1);
+    // console.log(map.getBounds([0])["_southWest"]);
   // }
 })
 

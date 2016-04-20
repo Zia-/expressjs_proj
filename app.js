@@ -70,32 +70,53 @@ query[key] = value;
 // console.log("hi");
 var minlat = '54.191105';
 var maxlat = '54.277578';
-var latbounds_key = 'node.lat';
-var latbounds_condition = {};
-latbounds_condition['$gt'] = minlat;
-latbounds_condition['$lt'] = maxlat;
-var lat_bounds = {};
-lat_bounds[latbounds_key] = latbounds_condition;
+// var latbounds_key = 'node.lat';
+// var latbounds_condition = {};
+// latbounds_condition['$gt'] = minlat;
+// latbounds_condition['$lt'] = maxlat;
+// var lat_bounds = {};
+// lat_bounds[latbounds_key] = latbounds_condition;
 // Again
 var minlon = '-4.462829';
 var maxlon = '-4.632459';
-var lonbounds_key = 'node.lon';
-var lonbounds_condition = {};
-lonbounds_condition['$gt'] = minlon;
-lonbounds_condition['$lt'] = maxlon;
-var lon_bounds = {};
-lon_bounds[lonbounds_key] = lonbounds_condition;
+// var lonbounds_key = 'node.lon';
+// var lonbounds_condition = {};
+// lonbounds_condition['$gt'] = minlon;
+// lonbounds_condition['$lt'] = maxlon;
+// var lon_bounds = {};
+// lon_bounds[lonbounds_key] = lonbounds_condition;
+//
+// var dic = [];
+// dic.push(lat_bounds);
+// dic.push(lon_bounds);
+//
+// var and = '$and';
+// var query = {};
+// query[and] = dic;
 
-var dic = [];
-dic.push(lat_bounds);
-dic.push(lon_bounds);
+function query_gen(minlat,maxlat,minlon,maxlon){
+  var latbounds_key = 'node.lat';
+  var latbounds_condition = {};
+  latbounds_condition['$gt'] = minlat;
+  latbounds_condition['$lt'] = maxlat;
+  var lat_bounds = {};
+  lat_bounds[latbounds_key] = latbounds_condition;
+  var lonbounds_key = 'node.lon';
+  var lonbounds_condition = {};
+  lonbounds_condition['$gt'] = minlon;
+  lonbounds_condition['$lt'] = maxlon;
+  var lon_bounds = {};
+  lon_bounds[lonbounds_key] = lonbounds_condition;
+  var dic = [];
+  dic.push(lat_bounds);
+  dic.push(lon_bounds);
+  var and = '$and';
+  var query = {};
+  query[and] = dic;
+  return query;
+}
 
-var and = '$and';
-var query = {};
-query[and] = dic;
-
-console.log(query);
-
+query = query_gen(minlat,maxlat,minlon,maxlon);
 
 app.get('/osmnodes', function(req, res){
   node_model.find(query, function(err, doc){
