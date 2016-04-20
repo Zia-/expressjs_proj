@@ -50,8 +50,16 @@ var nodesSchema = {
 // Initializing a model out of our schema. The first argument should be
 // the variable name itself, and thrid argument is the collection name in mongo
 var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
+
+// Making a query
+var key = 'node.version';
+var value = '5';
+var query = {};
+query[key] = value;
+
+
 app.get('/osmnodes', function(req, res){
-  node_model.find({'node.uid': '65562'}, function(err, doc){
+  node_model.find(query, function(err, doc){
     // res.send(doc);
     // console.log(typeof doc);
     var geojson_latlon_array = new Array;
