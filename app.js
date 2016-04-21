@@ -12,6 +12,7 @@ var cors = require('cors');
 var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
+
 //var users = require('./routes/users');
 
 var app = express();
@@ -30,6 +31,7 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+// app.use(express.static('views/mapbox.js'));
 //app.use('/users', users);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,11 +56,12 @@ var nodesSchema = {
 var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
 
 // Making a query
-var key = 'node.version';
-var value = '5';
-var query = {};
-query[key] = value;
+// var key = 'node.version';
+// var value = '5';
+// var query = {};
+// query[key] = value;
 
+// global.myvar = 100;
 
 // var latbound_key = 'node.lat';
 // var latbound_value = '$gt: 54.191105, $lt: 54.277578';
@@ -122,6 +125,11 @@ app.get('/osmnodes', function(req, res){
   node_model.find(query, function(err, doc){
     // res.send(doc);
     // console.log(typeof doc);
+    console.log(req.query.minlat);
+    console.log(req.query.minlon);
+    console.log(req.query.maxlat);
+    console.log(req.query.maxlon);
+
     var geojson_latlon_array = new Array;
     for (var d in doc){
       var lon = parseFloat(doc[d]['node'].lon);
