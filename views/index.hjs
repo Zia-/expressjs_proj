@@ -17,9 +17,7 @@
 
 <div id='map'>{{load}}</div>
 
-<!-- <script id="osmnodes_id" src="http://localhost:3002/osmnodes?x=50&y=10&z=1&q=123123"></script> -->
-<!-- <script id="osmnodes_id"></script> -->
-<!-- <script src="./views/mapbox.js"></script> -->
+<!-- To draw osmnodes onto mapbox -->
 <script src="/javascripts/osmnodes_rendering.js"></script>
 
 </body>
