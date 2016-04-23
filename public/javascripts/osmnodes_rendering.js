@@ -41,19 +41,49 @@ function loaddata(zoom){
       // console.log(map.getLayer(1));
 
         //  console.log(map.layer(heatMap));
+        // var x;
+        // console.log(map.hasLayer(x));
+        // console.log(x);
 
-      if (map.hasLayer(heatMap)) {
-            console.log("has");
-            map.removeLayer(heatMap);
+        // var count = 0;
+        // map.eachLayer(function (layer) {
+        //   count += 1;
+        //   console.log(layer);
+        //   if (count == 4){
+        //     map.removeLayer(heatMap);
+        //     map.addLayer(heatMap, true);
+        //     console.log("second");
+        //   } else if (count == 3) {
+        //     map.addLayer(heatMap, true);
+        //     console.log("first");
+        //   }
+        // });
+
+      function load_reload_data(){
+        var heatMap_map;
+        var count = 0;
+        map.eachLayer(function (layer) {
+          count += 1;
+          if (count == 4){
+              heatMap_map = layer; // heatMap_map and heatMap are different objects.
+          }
+        })
+
+        if (map.hasLayer(heatMap_map)) { // We cant pass heatMap obj to hasLayer also. Dunno why!
+            map.removeLayer(heatMap_map); // We cant pass simply heatMap object here.
             map.addLayer(heatMap);
         } else {
-          console.log("not has");
-            map.addLayer(heatMap);
+          map.addLayer(heatMap);
         }
+      }
+
+      load_reload_data();
 
         // map.eachLayer(function (layer) {
-  	    //      console.log(map.hasLayer(layer));
-        //     //  layer.bindPopup('Hello');
+  	    //      var x = layer;
+        //      console.log(x);
+        //      map.removeLayer(x);
+        // //     //  layer.bindPopup('Hello');
         //    });
 
       // window.alert("sometext");
