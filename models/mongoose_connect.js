@@ -63,6 +63,7 @@ module.exports.mongo_con = function(){
       console.log(req.query.minlon);
       console.log(req.query.maxlat);
       console.log(req.query.maxlon);
+      console.log(req.query.zoom);
 
       // Make js array to hold queried lat lon
       var geojson_latlon_array = new Array;
