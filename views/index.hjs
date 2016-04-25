@@ -18,6 +18,8 @@
 
 <div id='map'>{{load}}</div>
 
+<!-- Contains all tile centers at all zoom level of the world -->
+<script src="/javascripts/tileszoomcenters.js"></script>
 <!-- To draw osmnodes onto mapbox -->
 <script src="/javascripts/osmnodes_rendering.js"></script>
 
