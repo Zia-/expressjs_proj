@@ -21,7 +21,7 @@ module.exports.mongo_con = function(){
 
   // Initializing a model out of our schema. The first argument should be
   // the variable name itself, and thrid argument is the collection name in mongo
-  var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
+  var node_model = mongoose.model('node_model', nodesSchema, 'istanbul_osmnodes');
 
   // var minlat = '54.191105';
   // var maxlat = '54.277578';
@@ -38,8 +38,8 @@ module.exports.mongo_con = function(){
     lat_bounds[latbounds_key] = latbounds_condition;
     var lonbounds_key = 'node.lon';
     var lonbounds_condition = {};
-    lonbounds_condition['$gt'] = maxlon;
-    lonbounds_condition['$lt'] = minlon;
+    lonbounds_condition['$gt'] = minlon;
+    lonbounds_condition['$lt'] = maxlon;
     var lon_bounds = {};
     lon_bounds[lonbounds_key] = lonbounds_condition;
     var dic = [];
