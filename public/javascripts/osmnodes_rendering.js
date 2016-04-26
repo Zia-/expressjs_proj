@@ -18,7 +18,7 @@ jQuery.loadScript = function (url, callback) {
 }
 
 // Function to handle how many requests must be send to complete all tiles
-var tileflag = [];
+var requestcovered_region = turf.polygon([[[],[],[],[],[]]]);
 function tilerequests(minlontile, minlattile, maxlontile, maxlattile, zoom){
   // Calculate number of tiles should be there in the present screen
   // 180/Math.pow(2, zoom) and 360/Math.pow(2, zoom) is giving ideal tile size at that zoom level
@@ -30,16 +30,41 @@ function tilerequests(minlontile, minlattile, maxlontile, maxlattile, zoom){
   // console.log(numtiles);
   // console.log(zoom0_arr);
 
+  var bbox = turf.polygon([[[minlontile, minlattile], [maxlontile, minlattile],
+          [maxlontile, maxlattile], [minlontile, maxlattile], [minlontile, minlattile]]])
+  // console.log(bbox);
+  var extrabbox = turf.erase(bbox, requestcovered_region);
+  // console.log(extrabbox.geometry.coordinates[0]); // This is array
+  var polygon_arr = [requestcovered_region, bbox];
+  // console.log(polygon_arr);
+  var poly_fc = turf.featurecollection(polygon_arr);
+  // console.log(poly_fc);
+  requestcovered_region = turf.merge(poly_fc);
+  // console.log(requestcovered_region);
+
+
   // We have to make those boxes here
-  array = [];
-  array.push([28.979798555374146, 41.039112115960954, 28.99394989013672, 41.04214667672059])
-  array.push([28.979798555374146, 41.039112115960954, 28.99394989013672, 41.04214667672059])
-  array.push([28.979798555374146, 41.039112115960954, 28.99394989013672, 41.04214667672059])
+  // array = [];
+  // array.push([28.979798555374146, 41.039112115960954, 28.99394989013672, 41.04214667672059])
+  // array.push([28.979798555374146, 41.04214667672059, 28.99394989013672, 41.04514667672059])
+  // array.push([28.979798555374146, 41.04514667672059, 28.99394989013672, 41.04814667672059])
   // array.push([28.979798555374146, 41.039012115960954, 28.979998555374146, 41.039212115960954])
   // array.push([28.979798555374146, 41.039012115960954, 28.979998555374146, 41.039212115960954])
   // array.push([28.979798555374146, 41.039012115960954, 28.979998555374146, 41.039212115960954])
   // return array[0][0]
-  return array
+
+  if (extrabbox == null){
+    // console.log("extrabbox undefined");
+    var array = [];
+    return array;
+  } else {
+    var array = extrabbox.geometry.coordinates[0];
+    return array;
+  }
+
+  // var array = extrabbox.geometry.coordinates[0]
+  // console.log(array);
+  // return array
 }
 
 // Declaring min max lan lot tiles
@@ -61,17 +86,19 @@ function loaddata(minlontile, minlattile, maxlontile, maxlattile, zoom){
   // Generate Db requests accordingly and insert all of them into one variable.
   // console.log(tilerequests().length);
 
-  var tilesarray = tilerequests();
+  var tilesarray = tilerequests(minlontile, minlattile, maxlontile, maxlattile, zoom);
 
-  for (i=0; i<tilesarray.length; ++i){
-    var url = 'http://localhost:3002/osmnodes?minlon=' + tilesarray[i][0].toString()
-              + '&minlat=' + tilesarray[i][1].toString() + '&maxlon=' + tilesarray[i][2].toString()
-              + '&maxlat=' + tilesarray[i][3].toString() + '&zoom=' + zoom.toString()
-    // console.log(url);
+  if (tilesarray.length == 0){
+    return;
+  } else {
+
+
+
+    var url = 'http://localhost:3002/osmnodes?bboxarray=' + tilesarray.toString()
+              + '&zoom=' + zoom.toString()
     $.loadScript(url, function(){
-      // console.log(osmnodes_js);
       // Dont write var osmnodes_js as this var has already been declared in url response
-      osmnodes_js = osmnodes_js.concat(osmnodes_js.map(function (p) { return [p[1], p[0]]; }));
+      osmnodes_js = osmnodes_js.map(function (p) { return [p[1], p[0]]; });
       var heatMap = L.heatLayer(osmnodes_js,
                     {gradient: {0.4: 'gold', 0.65: 'lime', 1: 'red'}});
       heatMap.setOptions({blur: 0});
@@ -81,7 +108,27 @@ function loaddata(minlontile, minlattile, maxlontile, maxlattile, zoom){
       heatMap.setOptions({radius: 25});
       heatMap.addTo(map);
     });
+
   }
+  // for (i=0; i<tilesarray.length; ++i){
+  //   var url = 'http://localhost:3002/osmnodes?minlon=' + tilesarray[i][0].toString()
+  //             + '&minlat=' + tilesarray[i][1].toString() + '&maxlon=' + tilesarray[i][2].toString()
+  //             + '&maxlat=' + tilesarray[i][3].toString() + '&zoom=' + zoom.toString()
+  //   // console.log(url);
+  //   $.loadScript(url, function(){
+  //     console.log(osmnodes_js.length);
+  //     // Dont write var osmnodes_js as this var has already been declared in url response
+  //     osmnodes_js = osmnodes_js.concat(osmnodes_js.map(function (p) { return [p[1], p[0]]; }));
+  //     var heatMap = L.heatLayer(osmnodes_js,
+  //                   {gradient: {0.4: 'gold', 0.65: 'lime', 1: 'red'}});
+  //     heatMap.setOptions({blur: 0});
+  //     // maxZoom is imp otherwise the points will be at max intensity of display.
+  //     heatMap.setOptions({maxZoom: 19});
+  //     // Other options can be found here https://github.com/Leaflet/Leaflet.heat
+  //     heatMap.setOptions({radius: 25});
+  //     heatMap.addTo(map);
+  //   });
+  // }
 
   // map.eachLayer(function (layer) {
   //   console.log(layer);
@@ -178,8 +225,8 @@ var map = L.mapbox.map('map', 'mapbox.dark', {
           maxBounds: bounds,
           // maxZoom: 19,
           // minZoom: 7
-          maxZoom: 17,
-          minZoom: 17
+          maxZoom: 19,
+          minZoom: 19
 });
 
 // Load map function
