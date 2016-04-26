@@ -21,12 +21,12 @@ module.exports.mongo_con = function(){
 
   // Initializing a model out of our schema. The first argument should be
   // the variable name itself, and thrid argument is the collection name in mongo
-  var node_model = mongoose.model('node_model', nodesSchema, 'nodes_collection');
+  var node_model = mongoose.model('node_model', nodesSchema, 'istanbul_osmnodes');
 
-  var minlat = '54.191105';
-  var maxlat = '54.277578';
-  var minlon = '-4.462829';
-  var maxlon = '-4.632459';
+  // var minlat = '54.191105';
+  // var maxlat = '54.277578';
+  // var minlon = '-4.462829';
+  // var maxlon = '-4.632459';
 
   // Function to generate query for mongo
   function query_gen(minlat,maxlat,minlon,maxlon){
@@ -51,19 +51,25 @@ module.exports.mongo_con = function(){
     return query;
   }
 
-  // Generate query instance by executing query_gen function
-  query = query_gen(minlat,maxlat,minlon,maxlon);
+  // // Generate query instance by executing query_gen function
+  // query = query_gen(minlat,maxlat,minlon,maxlon);
 
   // This get function of app will handle url requestes coming on http://localhost:3002/osmnodes
   app.get('/osmnodes', function(req, res){
+    // Generate query instance by executing query_gen function
+    var minlat = req.query.minlat, minlon = req.query.minlon, maxlat = req.query.maxlat, maxlon = req.query.maxlon;
+    // var minlat = 53.95931761174562, minlon = -5.723876953125, maxlat = 54.48759113734097, maxlon = -3.4304809570312496;
+    // query = query_gen(req.query.minlat,req.query.maxlat,req.query.minlon,req.query.maxlon);
+    query = query_gen(minlat,maxlat,minlon,maxlon);
+
     node_model.find(query, function(err, doc){
 
       // Access minlat etc etc params coming with the url
-      console.log(req.query.minlat);
-      console.log(req.query.minlon);
-      console.log(req.query.maxlat);
-      console.log(req.query.maxlon);
-      console.log(req.query.zoom);
+      // console.log(req.query.minlat);
+      // console.log(req.query.minlon);
+      // console.log(req.query.maxlat);
+      // console.log(req.query.maxlon);
+      // console.log(req.query.zoom);
 
       // Make js array to hold queried lat lon
       var geojson_latlon_array = new Array;
