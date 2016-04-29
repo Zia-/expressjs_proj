@@ -129,6 +129,9 @@ module.exports.mongo_con = function(){
     query = query_gen(bboxarray);
 
     node_model.find(query, function(err, doc){
+    // node_model.find(query).toArray(function(err, docs) {
+    // node_model.find(query).each(function(doc) { 
+
 
       // Access minlat etc etc params coming with the url
       // console.log(req.query.minlat);
